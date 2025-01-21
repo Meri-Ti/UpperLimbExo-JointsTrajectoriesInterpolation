@@ -1,8 +1,9 @@
 # UpperLimbExo-JointsTrajectoriesInterpolation
 
-This repository contains MATLAB scripts used to analyze and plot the joint trajectories during horizontal abduction (H. Abd) movements at 30°, 60°, and 120° for a upper limb exoskeleton. Each script processes a specific set of recorded logs and generates relevant plots for trajectory visualization with the Gaussian resistive control strategy.
+This repository contains MATLAB scripts used to analyze and plot the joint trajectories during horizontal abduction (H. Abd) movements at 30°, 60°, and 120° for a upper limb exoskeleton.
+Each script processes a specific set of recorded logs and generates relevant plots for trajectory visualization with the Gaussian resistive control strategy.
 
-## Files in the Repository
+## Files needed
 
 1. **`ex_trsp_habd30.xcs`** – Data log for horizontal abduction at 30°.
 2. **`ex_trsp_habd60.xcs`** – Data log for horizontal abduction at 60°.
@@ -10,12 +11,13 @@ This repository contains MATLAB scripts used to analyze and plot the joint traje
 
 ## Code Overview
 
-The primary MATLAB script (`plot_trajectories.m`) performs the following tasks:
+The primary MATLAB Live script perfroms
 
 - **Data Loading**: Reads the log files and extracts joint angles for each joint involved in the horizontal abduction.
 - **Trajectory Calculation**: Identifies the start and end times of each movement and shifts the time axis to start from 0.
 - **Plotting**: Generates individual trajectory plots for each joint, highlighting the time when the middle position is reached with a dashed line. It also saves the generated plots as SVG files.
-- **Linear Interpolation**: For Joint 6, the code computes a linear interpolation for the recorded movement. This interpolation is plotted and compared to the original trajectory.
+- **Linear Interpolation**: For Joint 6, the code computes a linear interpolation for the recorded movement, since J6 is the one which guides the overall movements.
+  This interpolation is plotted and compared to the original trajectory.
 - **Polynomial Fitting**: The code fits a 5th-degree polynomial for each joint angle relative to Joint 6's trajectory, allowing smooth interpolation of joint movements.
 
 ## Plots
@@ -26,27 +28,90 @@ The script generates several plots:
 2. **Linear Interpolation of Joint 6**: A plot comparing the original recorded trajectory of Joint 6 with the linear interpolation over time.
 3. **Polynomial Fitting for Each Joint**: For each joint, the trajectory is fitted with a 5th-degree polynomial relative to the movement of Joint 6.
 
-## Usage
 
-1. Clone this repository:
-    ```bash
-    git clone https://github.com/Meri-Ti/UpperLimbExo-JointsTrajectoriesInterpolation.git
-    ```
-2. Open MATLAB and run the script `plot_trajectories.m` for each angle (30°, 60°, or 120°):
-    ```matlab
-    run('plot_trajectories.m')
-    ```
-3. The generated plots will be saved as SVG files in the working directory.
+# MATLAB Code: Angular Trajectory Interpolation and Visualization
 
-## Example Plots
+This MATLAB script is designed to process, interpolate, and visualize angular trajectories for a robotic system's joints. The script includes data processing, trajectory extraction, interpolation, and graphical representation with a focus on human horizontal abduction at 30 degrees.
 
-Below are examples of the generated trajectory plots:
+---
 
-- **Joint 6 Linear Interpolation (H. Abd 30°)**:
-    ![J6 Linear Interpolation](path_to_image/J6_interp30.svg)
+## Code Structure and Workflow
 
-- **Joint 1 Polynomial Fitting (H. Abd 30°)**:
-    ![J1 Polynomial Fitting](path_to_image/J1_5thInterp30.svg)
+### 1. **Data Loading**
+- **Input File**: `ex_trsp_habd30.xcs`
+  - Contains angular positions of robotic joints recorded during a horizontal abduction test.
+- The script parses the file to extract time-series data and joint angles for seven joints.
+
+---
+
+### 2. **Key Operations**
+
+#### **Initial Time and Interval Selection**
+- Identifies the first movement of `J6` (Joint 6) to determine the start time (`initialTime_Go`).
+- Extracts the interval for the "Go" movement up to a predefined index.
+
+#### **Shift Time**
+- Time is normalized by subtracting `initialTime_Go`, enabling easier analysis of the trajectory's timeline.
+
+#### **Extract and Visualize Joint Trajectories**
+- Plots the trajectory for each joint, marking the midpoint of the movement with a dashed vertical line for better visualization.
+- Each plot is saved as an SVG file.
+
+---
+
+### 3. **Trajectory Interpolation**
+#### **Linear Interpolation for J6**
+- Fits a linear model to the `J6` trajectory during the "Go" interval.
+- **Polynomial Interpolation**: Generates a fifth-degree polynomial fit for each joint as a function of `J6`.
+
+#### **Visualization of Interpolations**
+- Plots interpolated data for `J6` alongside the original trajectory.
+- Generates scatter plots of each joint's angular position relative to `J6` with interpolated points.
+- Each plot is saved as an SVG file.
+
+---
+
+### 4. **Output Files**
+
+#### **Individual Joint Trajectories**
+- Files: `J1_original30.svg`, `J2_original30.svg`, ..., `J7_original30.svg`
+- Displays the time evolution of each joint's angular position during the movement.
+
+#### **Linear Interpolation for J6**
+- File: `J6_interp30.svg`
+- Shows the original and interpolated `J6` trajectory with detailed labeling.
+
+#### **5th-Degree Polynomial Interpolation for All Joints**
+- Files: `J1_5thInterp30.svg`, `J2_5thInterp30.svg`, ..., `J7_5thInterp30.svg`
+- Visualizes the polynomial interpolation of each joint as a function of `J6`.
+
+---
+
+## Running the Script
+
+1. **Setup**
+   - Place the input file (`ex_trsp_habd30.xcs`) in the working directory.
+   - Ensure MATLAB is installed and supports advanced plotting functions.
+
+2. **Execution**
+   - Open MATLAB and set the current folder to the project directory.
+   - Run the script:
+     ```matlab
+     clear all; close all; clc;
+     run('your_script_name.m');
+     ```
+
+3. **Output**
+   - Generated SVG files will be saved in the working directory for further analysis or integration.
+
+---
+
+## Notes
+
+- The script uses custom plotting standards colours defined in `PLOT_STANDARDS` for consistent visualization. Ensure this function is included in the project.
+- Adjust font sizes, axis limits, or other parameters within the script to suit your specific requirements.
+- Ensure the input data is correctly formatted to avoid runtime errors.
+
 
 
 
